@@ -4,27 +4,30 @@ using UnityEngine;
 
 public class plcontr : MonoBehaviour
 {
-    public Animator _animR;
-    private float _speed = 5f;
+    public float speed;
+    [SerializeField] Animator animator;
+    private Vector2 direction;
     [SerializeField] Rigidbody2D rb;
-    Vector2 move;
 
-    // Update is called once per frame
-    void FixedUpdate()
+    void Start() 
     {
-        if ((Input.GetKey("up")) || (Input.GetKey("down")) || (Input.GetKey("right")) || (Input.GetKey("left")) || (Input.GetKey("w")) || (Input.GetKey("a")) || (Input.GetKey("s")) || (Input.GetKey("d")))  
-        {
-        move.x = Input.GetAxis("Horizontal");
-        move.y = Input.GetAxis("Vertical");
-        //_animR.SetBool("stop", false);
+        rb = GetComponent<Rigidbody2D>();
+    }
 
-        rb.MovePosition(rb.position + move * _speed * Time.fixedDeltaTime);
-        }
-        /*else 
-        {
-            _animR.SetBool("stop", true);
-        }
-        */
+    void Update() 
+    {
+        direction.x = Input.GetAxisRaw("Horizontal");
+        direction.y = Input.GetAxisRaw("Vertical");
+
+        animator.SetFloat("Horizontal", direction.x);
+        animator.SetFloat("Vertical", direction.y);
+        //animator.SetFloat("Speed", direction.sqrMagnitude);
+        animator.SetTrigger("Move");
+    }
+
+    void FixedUpdate() 
+    {
+        rb.MovePosition(rb.position + direction * speed * Time.fixedDeltaTime);
     }
 }
 
